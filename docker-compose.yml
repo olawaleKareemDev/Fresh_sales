@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "python3 manage.py runserver 0.0.0.0:8080"
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app
+
+
+  # celery_servcie:
+  #   command: celery -A freshsales_automations worker -l info
+  #   depends_on:
+  #     - backend

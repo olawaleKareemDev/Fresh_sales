@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-
+# from kombu.utils.url import safequote
 # import environ
-# # initialize environs
+
+
+# # # initialize environs
 # env = environ.Env()
 # environ.Env.read_env()
 
@@ -26,10 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-414$y3_1r=)!!&kb-xnjhr&!sr&vhux)w5sh@x1h#cit81*wbq"
-
+SECRET_KEY =  "django-insecure-414$y3_1r=)!!&kb-xnjhr&!sr&vhux)w5sh@x1h#cit81*wbq"
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -109,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Africa/Lagos"
 
 USE_I18N = True
 
@@ -126,4 +127,24 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# FRESH_SALES_API_KEY = env('FRESH_SALES_API_KEY')
+# celery details
+
+CELERY_BROKER_URL = os.environ.get('CLOUD_AMPQ_BROKER')
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+
+
+# Email
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = "olawalekareemdev@gmail.com"
+EMAIL_HOST_PASSWORD = os.environ["EMAIL_PASSWORD"]
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = "olawalekareemdev@gmail.com"
+
+
+

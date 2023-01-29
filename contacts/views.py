@@ -4,35 +4,48 @@ from rest_framework import status
 from .serializers import ContactSerializers
 import os
 
+from django.http import HttpResponse
+from .dataServices import DataExtraction
+from .tasks import sleepy, send_email_task, send_email_task_now
+from .freshSalesUpdate import UpdateFreshSales
 
-from dotenv import read_dotenv
 
-
+# test celery
+def index(request):
+    sleepy.delay(10)
+    # try:
+    #     send_email_task_now()
+    # except Exception as e:
+    #     print(e)
+    return HttpResponse('<h1>The email is sent</h1>')
 
 
 class ContactViewSet(viewsets.ViewSet):
 
     
 
-    def create_contacts(self, request):
+    def create(self, request):
 
        
         try:
 
-            # Todo
-                # get the CSV from the mifos service
-                # update it one after the other
-
-            data = {
-                'db_host': os.environ.get('MIFOS_DB_USER'),
-                'os_version': os.environ
-            }
-
+            # try:   
+            #     data = DataExtraction().cleanData() 
+            # except Exception as e:
+            #     print(e)
+            #     data= 'fake data'
        
-            data= {
-                "Status": "SUCCESS",
-                "Message": data
-            }
+            # data= {
+            #     "Status": "SUCCESS",
+            #     "Message": str(data)
+            # }
+
+            try:   
+                data = UpdateFreshSales().create_contacts()
+            except Exception as e:
+                print(e)
+                data= 'fake data'
+
             return Response(status=status.HTTP_200_OK, data=data)
         except Exception as e:
             error_data= {
