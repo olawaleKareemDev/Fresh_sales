@@ -500,39 +500,45 @@ class DataExtraction:
 
 
         # format output
-        # print('at final output')
+    
         # test_data = final_corp[:1]
+        test_data = final_corp
         return_data = []
 
         for ind in final_corp.index:
             return_data.append({
-                'client_id': str(test_data['client_id'][ind]), 
+                
                 'first_name': str(test_data['client_name'][ind]),  # client_name is system first_name
-                'Phone_no':str(test_data['Phone_no'][ind]),
-                'email':str(test_data['email'][ind]), 
-                'customer_contact_address':str(test_data['customer_contact_address'][ind]),
-                'rc_number':str(test_data['rc_number'][ind]),
-                'director_bvn':str(test_data['director_bvn'][ind]),
-                'director_name':str(test_data['director_name'][ind]),
-                'director_phone_no':str(test_data['director_phone_no'][ind]),
-                'director_email':str(test_data['director_email'][ind]),
-                'director_gender':str(test_data['director_gender'][ind]),
-                'director_DOB':str(test_data['director_DOB'][ind]),
-                'nature_of_business':str(test_data['nature_of_business'][ind]),
-                'industry/sector':str(test_data['industry/sector'][ind]),
-                'date_of_incorporation':str(test_data['date_of_incorporation'][ind]),
-                'account_officer':str(test_data['account_officer'][ind]), 
-                'account_no':str(test_data['account_no'][ind]),
-                'account_type':str(test_data['account_type'][ind]),
-                'product_name':str(test_data['product_name'][ind]),
-                'account_balance':str(test_data['account_balance'][ind]),
-                'loan_value':str(test_data['loan_value'][ind]),
-                'outstanding_loan_amount':str(test_data['outstanding_loan_amount'][ind]),
-                'last_repayment_date':str(test_data['last_repayment_date'][ind]),
-                'total_balance_all_accounts':str(test_data['total_balance_all_accounts'][ind]),
-                'debit_balance':str(test_data['debit_balance'][ind]),
-                'maturity_date':str(test_data['maturity_date'][ind]),
-                'total_credit_amount':str(test_data['total_credit_amount'][ind])
+                'mobile_number':str(test_data['Phone_no'][ind]),
+                'email':str(test_data['email'][ind]),
+
+                'custom_field':{
+                    'cf_client_id': str(test_data['client_id'][ind]), 
+                    'cf_customer_contact_address':str(test_data['customer_contact_address'][ind]),
+                    'cf_rc_number':str(test_data['rc_number'][ind]),
+                    'cf_director_bvn':str(test_data['director_bvn'][ind]),
+                    'cf_director_name':str(test_data['director_name'][ind]),
+                    'cf_director_phone_no':str(test_data['director_phone_no'][ind]),
+                    'cf_director_email':str(test_data['director_email'][ind]),
+                    'cf_director_gender':str(test_data['director_gender'][ind]),
+                    'cf_director_DOB':str(test_data['director_DOB'][ind]),
+                    'cf_nature_of_business':str(test_data['nature_of_business'][ind]),
+                    'cf_industry/sector':str(test_data['industry/sector'][ind]),
+                    'cf_date_of_incorporation':str(test_data['date_of_incorporation'][ind]),
+                    'cf_account_officer':str(test_data['account_officer'][ind]), 
+                    'cf_account_no':str(test_data['account_no'][ind]),
+                    'cf_account_type':str(test_data['account_type'][ind]),
+                    'cf_product_name':str(test_data['product_name'][ind]),
+                    'cf_account_balance':str(test_data['account_balance'][ind]),
+                    'cf_loan_value':str(test_data['loan_value'][ind]),
+                    'cf_outstanding_loan_amount':str(test_data['outstanding_loan_amount'][ind]),
+                    'cf_last_repayment_date':str(test_data['last_repayment_date'][ind]),
+                    'cf_total_balance_all_accounts':str(test_data['total_balance_all_accounts'][ind]),
+                    'cf_debit_balance':str(test_data['debit_balance'][ind]),
+                    'cf_maturity_date':str(test_data['maturity_date'][ind]),
+                    'cf_total_credit_amount':str(test_data['total_credit_amount'][ind])
+                }
+
             })
 
         print('just returned data')
@@ -540,35 +546,44 @@ class DataExtraction:
 
 
         # Todo
-        # sample_data = {
-        #     'client_id': '5981',
-        #     'client_name': 'A and A LEGAL PRACTICE',
-        #     'Phone_no': '08028189805',
-        #     'email': 'mosespeter928@gmail.com',
-        #     'customer_contact_address': 'None',
-        #     'rc_number': '', 
-        #     'director_bvn': '22301540340',
-        #     'director_name': 'ADEDOTUN PETER MOSES',
-        #     'director_phone_no': '08028189805',
-        #     'director_email': 'rockhead928@yahoo.com',
-        #     'director_gender': 'Male',
-        #     'director_DOB': '09/28/1983',
-        #     'nature_of_business': 'N/a on Mifos',
-        #     'industry/sector': 'N/a on Mifos',
-        #     'date_of_incorporation': '01/01/2010',
-        #     'account_officer': 'CHUKWURAH, PATRICK',
-        #     'account_no': '1000068842',
-        #     'account_type': 'Single entity account',
-        #     'product_name': 'Corporate Current Account',
-        #     'account_balance': '19559', 
-        #     'loan_value': 'nan', 
-        #     'outstanding_loan_amount': 'nan', 
-        #     'last_repayment_date': '', 
-        #     'total_balance_all_accounts': '19559', 
-        #     'debit_balance': '0', 
-        #     'maturity_date': '', 
-        #     'total_credit_amount': '35056976.21'
-        #     }
+        # sample_data = [{
+            
+        #     'first_name': 'test user mario',
+        #     'mobile_number': '08728189856',
+        #     'email': 'testmario@gmail.com',
+        #     'custom_field':{
+        #             'cf_client_id': '5981',
+        #             'cf_customer_contact_address': 'None',
+        #             'cf_rc_number': '', 
+        #             'cf_director_bvn': '22301540340',
+        #             'cf_director_name': 'ADEDOTUN PETER MOSES',
+        #             'cf_director_phone_no': '08028189805',
+        #             'cf_director_email': 'rockhead928@yahoo.com',
+        #             'cf_director_gender': 'Male',
+        #             'cf_director_DOB': '09/28/1983',
+        #             'cf_nature_of_business': 'N/a on Mifos',
+        #             'cf_industry/sector': 'N/a on Mifos',
+        #             'cf_date_of_incorporation': '01/01/2010',
+        #             'cf_account_officer': 'CHUKWURAH, PATRICK',
+        #             'cf_account_no': '1000068842',
+        #             'cf_account_type': 'Single entity account',
+        #             'cf_product_name': 'Corporate Current Account',
+        #             'cf_account_balance': '19559', 
+        #             'cf_loan_value': 'nan', 
+        #             'cf_outstanding_loan_amount': 'nan', 
+        #             'cf_last_repayment_date': '', 
+        #             'cf_total_balance_all_accounts': '19559', 
+        #             'cf_debit_balance': '0', 
+        #             'cf_maturity_date': '', 
+        #             'cf_total_credit_amount': '35056976.21'
+        #         }
+
+        #     }]
+
+        # return sample_data
+
+
+
 
 
 
