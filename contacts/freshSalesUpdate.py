@@ -1,10 +1,11 @@
 from .dataServices import DataExtraction
 import requests
+import os
 
 
 class UpdateFreshSales:
 
-    admin_key = 'o4gqiTzbjoztYNA0jzKong'
+    admin_key = os.environ.get("ADMIN_KEY"),
 
     headers = {
      "content-type": "application/json", 
@@ -31,10 +32,11 @@ class UpdateFreshSales:
             print('i am here')
             print(data)
             print(len(data), 'This is the number of data to processd')
+            count = 0
 
 
             for i in range(len(data)):
-                
+
                 payload = {"contact":data[i]}
                 res = requests.post(url,headers=self.headers,json= payload)
 
@@ -42,8 +44,9 @@ class UpdateFreshSales:
                 # print(res.json())
 
                 if res.status_code==400 and 'already exists' in res.json()['errors']['message'][0]:
-
-                    print('updating existing records')
+               
+                    print(f'updating existing records {count}')
+                    count += 1
 
                     update_payload ={ "unique_identifier": {"emails": payload['contact']['emails']} }
                     payload['contact'].pop('emails')

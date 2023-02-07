@@ -502,12 +502,12 @@ class DataExtraction:
         # format output
     
         # test_data = final_corp[:1]
-        test_data = final_corp[:1]
+        test_data = final_corp
         return_data = []
 
         print(test_data, len(test_data))
 
-        for ind in final_corp:
+        for ind in test_data.index:
             return_data.append({
                 
                 'first_name': str(test_data.get("client_name")[ind]),  # client_name is system first_name
@@ -544,6 +544,7 @@ class DataExtraction:
 
             })
 
+        print(return_data)
         print('just returned data')
         return return_data
 
