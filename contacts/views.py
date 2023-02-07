@@ -27,7 +27,6 @@ class ContactViewSet(viewsets.ViewSet):
     def create(self, request):
 
         key = request.headers.get('key')
-        print(key, os.environ.get('API_KEY'))
 
         if key == os.environ.get('API_KEY'):
        

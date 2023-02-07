@@ -30,7 +30,11 @@ class UpdateFreshSales:
         try:
             print('i am here')
             print(data)
+            print(len(data), 'This is the number of data to processd')
+
+
             for i in range(len(data)):
+                
                 payload = {"contact":data[i]}
                 res = requests.post(url,headers=self.headers,json= payload)
 

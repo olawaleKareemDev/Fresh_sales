@@ -502,15 +502,18 @@ class DataExtraction:
         # format output
     
         # test_data = final_corp[:1]
-        test_data = final_corp
+        test_data = final_corp[:1]
         return_data = []
 
-        for ind in final_corp.index:
+        print(test_data, len(test_data))
+
+        for ind in test_data.index:
             return_data.append({
                 
                 'first_name': str(test_data['client_name'][ind]),  # client_name is system first_name
+                'last_name': ' ',
                 'mobile_number':str(test_data['Phone_no'][ind]),
-                'email':str(test_data['email'][ind]),
+                'emails':str(test_data['email'][ind]),
 
                 'custom_field':{
                     'cf_client_id': str(test_data['client_id'][ind]), 
@@ -545,42 +548,44 @@ class DataExtraction:
         return return_data
 
 
-        # Todo
-        # sample_data = [{
-            
-        #     'first_name': 'test user mario',
-        #     'mobile_number': '08728189856',
-        #     'email': 'testmario@gmail.com',
-        #     'custom_field':{
-        #             'cf_client_id': '5981',
-        #             'cf_customer_contact_address': 'None',
-        #             'cf_rc_number': '', 
-        #             'cf_director_bvn': '22301540340',
-        #             'cf_director_name': 'ADEDOTUN PETER MOSES',
-        #             'cf_director_phone_no': '08028189805',
-        #             'cf_director_email': 'rockhead928@yahoo.com',
-        #             'cf_director_gender': 'Male',
-        #             'cf_director_DOB': '09/28/1983',
-        #             'cf_nature_of_business': 'N/a on Mifos',
-        #             'cf_industry/sector': 'N/a on Mifos',
-        #             'cf_date_of_incorporation': '01/01/2010',
-        #             'cf_account_officer': 'CHUKWURAH, PATRICK',
-        #             'cf_account_no': '1000068842',
-        #             'cf_account_type': 'Single entity account',
-        #             'cf_product_name': 'Corporate Current Account',
-        #             'cf_account_balance': '19559', 
-        #             'cf_loan_value': 'nan', 
-        #             'cf_outstanding_loan_amount': 'nan', 
-        #             'cf_last_repayment_date': '', 
-        #             'cf_total_balance_all_accounts': '19559', 
-        #             'cf_debit_balance': '0', 
-        #             'cf_maturity_date': '', 
-        #             'cf_total_credit_amount': '35056976.21'
-        #         }
 
-        #     }]
 
-        # return sample_data
+
+        # test_data = [ {
+        #                 'first_name': 'A and A LEGAL PRACTICE',
+        #                 'last_name': ' ',
+        #                 'mobile_number': '08028189805',
+        #                 'emails': 'mosespeter928@gmail.com', 
+        #                  'custom_field': {
+        #                     'cf_client_id': '5981', 
+        #                     'cf_customer_contact_address': 'None', 
+        #                     'cf_rc_number': '', 
+        #                     'cf_director_bvn': '22301540340', 
+        #                     'cf_director_name': 'ADEDOTUN PETER MOSES', 
+        #                     'cf_director_phone_no': '08028189805', 
+        #                     'cf_director_email': 'rockhead928@yahoo.com', 
+        #                     'cf_director_gender': 'Male', 
+        #                     'cf_director_DOB': '09/28/1983', 
+        #                     'cf_nature_of_business': 'N/a on Mifos', 
+        #                     'cf_industry/sector': 'N/a on Mifos', 
+        #                     'cf_date_of_incorporation': '01/01/2010', 
+        #                     'cf_account_officer': 'CHUKWURAH, PATRICK', 
+        #                     'cf_account_no': '1000068842', 
+        #                     'cf_account_type': 'Single entity account',
+        #                      'cf_product_name': 'Corporate Current Account', 
+        #                      'cf_account_balance': '127279',
+        #                       'cf_loan_value': 'nan', 
+        #                       'cf_outstanding_loan_amount': 'nan',
+        #                        'cf_last_repayment_date': '', 
+        #                        'cf_total_balance_all_accounts': '127279', 
+        #                        'cf_debit_balance': '0', 
+        #                        'cf_maturity_date': '', 
+        #                        'cf_total_credit_amount': '35276976.21'
+        #                        }
+        #                 }
+        #             ]
+
+        return test_data
 
 
 
