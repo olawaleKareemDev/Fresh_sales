@@ -507,7 +507,7 @@ class DataExtraction:
 
         print(test_data, len(test_data))
 
-        for ind in test_data.index:
+        for ind in final_corp:
             return_data.append({
                 
                 'first_name': str(test_data['client_name'][ind]),  # client_name is system first_name
