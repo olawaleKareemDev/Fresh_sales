@@ -21,17 +21,23 @@ class UpdateFreshSales:
         pass
 
 
-    def create_contacts(self):
+    def create_contacts(self, size):
 
         url = f'{self.BASEURL}/contacts'
         url_upsert = f'{self.BASEURL}/contacts/upsert'
 
-        data = DataExtraction().cleanData() 
+        is_data, data, total_data_size = DataExtraction().cleanData(size) 
+
+        if not is_data:
+            return False, {'status':'FAIL', 'Message':data}
+
+            pass
+
 
         try:
             print('i am here')
             print(data)
-            print(len(data), 'This is the number of data to processd')
+            print(len(data), 'This is the number of data to processed')
             count = 0
 
 
@@ -58,7 +64,7 @@ class UpdateFreshSales:
                     # print(update_res.status_code)
        
 
-            return True, {'status':'SUCCESS', 'Message':'Successfully loaded data'}
+            return True, {'status':'SUCCESS', 'Message':f'Successfully loaded {len(data)} contact data out of {total_data_size}'}
 
         except Exception as e:
             print(e)

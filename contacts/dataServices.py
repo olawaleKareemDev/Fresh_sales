@@ -11,7 +11,7 @@ class DataExtraction:
         pass
 
 
-    def cleanData(self):
+    def cleanData(self, size):
 
 
         Mifosdb = mysql.connector.connect(
@@ -502,11 +502,28 @@ class DataExtraction:
         # format output
     
         # test_data = final_corp[:1]
-        test_data = final_corp
+
+        print('checking data upload size')
+        if size == 500:
+            print('data within 500 df')
+            test_data = final_corp[:500]
+        else:
+            print('data beyond 500 df')
+            if len(final_corp) <= size:
+                val, rem = divmod(size, 500)
+                if val == 1:
+                    test_data = final_corp[500:size]
+                if val > 1:
+                    test_data = final_corp[val-1:size]
+
+            else:
+                return False, f"data out of scope. This is the number of data currently available {len(final_corp)}", len(final_corp)
+
+
+        # test_data = final_corp
+        # print(test_data, len(test_data))
+
         return_data = []
-
-        print(test_data, len(test_data))
-
         for ind in test_data.index:
             return_data.append({
                 
@@ -544,9 +561,9 @@ class DataExtraction:
 
             })
 
-        print(return_data)
-        print('just returned data')
-        return return_data
+        # print(return_data)
+        # print('just returned data')
+        return True, return_data, len(final_corp)
 
 
 

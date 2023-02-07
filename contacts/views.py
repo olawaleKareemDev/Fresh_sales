@@ -26,14 +26,25 @@ class ContactViewSet(viewsets.ViewSet):
 
     def create(self, request):
 
+        # print('will process 500 contacts per call')
+
         key = request.headers.get('key')
+
+        size = int(request.headers.get('size'))
+
+        if not size >= 500 :
+            size_error_data= {
+                        "Status": "FAILED",
+                        "Message": "Only process data starting from 500 upward"
+                    }
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=size_error_data)
 
         if key == os.environ.get('API_KEY'):
        
    
             print('begin data loading')
         
-            is_data, data = UpdateFreshSales().create_contacts()
+            is_data, data = UpdateFreshSales().create_contacts(size)
 
             if is_data:
                 return Response(status=status.HTTP_200_OK, data=data)
