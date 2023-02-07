@@ -510,36 +510,36 @@ class DataExtraction:
         for ind in final_corp:
             return_data.append({
                 
-                'first_name': str(test_data['client_name'][ind]),  # client_name is system first_name
+                'first_name': str(test_data.get("client_name")[ind]),  # client_name is system first_name
                 'last_name': ' ',
-                'mobile_number':str(test_data['Phone_no'][ind]),
-                'emails':str(test_data['email'][ind]),
+                'mobile_number':str(test_data.get("Phone_no")[ind]),
+                'emails':str(test_data.get("email")[ind]),
 
                 'custom_field':{
-                    'cf_client_id': str(test_data['client_id'][ind]), 
-                    'cf_customer_contact_address':str(test_data['customer_contact_address'][ind]),
-                    'cf_rc_number':str(test_data['rc_number'][ind]),
-                    'cf_director_bvn':str(test_data['director_bvn'][ind]),
-                    'cf_director_name':str(test_data['director_name'][ind]),
-                    'cf_director_phone_no':str(test_data['director_phone_no'][ind]),
-                    'cf_director_email':str(test_data['director_email'][ind]),
-                    'cf_director_gender':str(test_data['director_gender'][ind]),
-                    'cf_director_DOB':str(test_data['director_DOB'][ind]),
-                    'cf_nature_of_business':str(test_data['nature_of_business'][ind]),
-                    'cf_industry/sector':str(test_data['industry/sector'][ind]),
-                    'cf_date_of_incorporation':str(test_data['date_of_incorporation'][ind]),
-                    'cf_account_officer':str(test_data['account_officer'][ind]), 
-                    'cf_account_no':str(test_data['account_no'][ind]),
-                    'cf_account_type':str(test_data['account_type'][ind]),
-                    'cf_product_name':str(test_data['product_name'][ind]),
-                    'cf_account_balance':str(test_data['account_balance'][ind]),
-                    'cf_loan_value':str(test_data['loan_value'][ind]),
-                    'cf_outstanding_loan_amount':str(test_data['outstanding_loan_amount'][ind]),
-                    'cf_last_repayment_date':str(test_data['last_repayment_date'][ind]),
-                    'cf_total_balance_all_accounts':str(test_data['total_balance_all_accounts'][ind]),
-                    'cf_debit_balance':str(test_data['debit_balance'][ind]),
-                    'cf_maturity_date':str(test_data['maturity_date'][ind]),
-                    'cf_total_credit_amount':str(test_data['total_credit_amount'][ind])
+                    'cf_client_id': str(test_data.get("client_id")[ind]), 
+                    'cf_customer_contact_address':str(test_data.get("customer_contact_address")[ind]),
+                    'cf_rc_number':str(test_data.get("rc_number")[ind]),
+                    'cf_director_bvn':str(test_data.get("director_bvn")[ind]),
+                    'cf_director_name':str(test_data.get("director_name")[ind]),
+                    'cf_director_phone_no':str(test_data.get("director_phone_no")[ind]),
+                    'cf_director_email':str(test_data.get("director_email")[ind]),
+                    'cf_director_gender':str(test_data.get("director_gender")[ind]),
+                    'cf_director_DOB':str(test_data.get("director_DOB")[ind]),
+                    'cf_nature_of_business':str(test_data.get("nature_of_business")[ind]),
+                    'cf_industry/sector':str(test_data.get("industry/sector")[ind]),
+                    'cf_date_of_incorporation':str(test_data.get("date_of_incorporation")[ind]),
+                    'cf_account_officer':str(test_data.get("account_officer")[ind]), 
+                    'cf_account_no':str(test_data.get("account_no")[ind]),
+                    'cf_account_type':str(test_data.get("account_type")[ind]),
+                    'cf_product_name':str(test_data.get("product_name")[ind]),
+                    'cf_account_balance':str(test_data.get("account_balance")[ind]),
+                    'cf_loan_value':str(test_data.get("loan_value")[ind]),
+                    'cf_outstanding_loan_amount':str(test_data.get("outstanding_loan_amount")[ind]),
+                    'cf_last_repayment_date':str(test_data.get("last_repayment_date")[ind]),
+                    'cf_total_balance_all_accounts':str(test_data.get("total_balance_all_accounts")[ind]),
+                    'cf_debit_balance':str(test_data.get("debit_balance")[ind]),
+                    'cf_maturity_date':str(test_data.get("maturity_date")[ind]),
+                    'cf_total_credit_amount':str(test_data.get("total_credit_amount")[ind])
                 }
 
             })
