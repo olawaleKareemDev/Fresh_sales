@@ -26,7 +26,7 @@ class UpdateFreshSales:
         url = f'{self.BASEURL}/contacts'
         url_upsert = f'{self.BASEURL}/contacts/upsert'
 
-        is_data, data, total_data_size = DataExtraction().cleanData(size) 
+        is_data, data, total_data_size, starting_point = DataExtraction().cleanData(size) 
 
         if not is_data:
             return False, {'status':'FAIL', 'Message':data}
@@ -38,7 +38,8 @@ class UpdateFreshSales:
             print('i am here')
             print(data)
             print(len(data), 'This is the number of data to processed')
-            count = 0
+            newly_created = 0
+            count = starting_point
 
 
             for i in range(len(data)):
@@ -48,6 +49,9 @@ class UpdateFreshSales:
 
                 # print(res.status_code)
                 # print(res.json())
+                if res.status_code==200:
+                    newly_created += 1
+                    print(f'Created {newly_created} records')
 
                 if res.status_code==400 and 'already exists' in res.json()['errors']['message'][0]:
                

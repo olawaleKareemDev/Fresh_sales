@@ -507,14 +507,17 @@ class DataExtraction:
         if size == 500:
             print('data within 500 df')
             test_data = final_corp[:500]
+            starting_point =1
         else:
             print('data beyond 500 df')
-            if len(final_corp) <= size:
+            if  size <= len(final_corp):
                 val, rem = divmod(size, 500)
                 if val == 1:
                     test_data = final_corp[500:size]
+                    starting_point = 500
                 if val > 1:
-                    test_data = final_corp[val-1:size]
+                    starting_point =500 * (val-1)
+                    test_data = final_corp[starting_point:size]
 
             else:
                 return False, f"data out of scope. This is the number of data currently available {len(final_corp)}", len(final_corp)
@@ -563,7 +566,7 @@ class DataExtraction:
 
         # print(return_data)
         # print('just returned data')
-        return True, return_data, len(final_corp)
+        return True, return_data, len(final_corp), starting_point
 
 
 
