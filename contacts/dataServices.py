@@ -72,7 +72,7 @@ class DataExtraction:
             
             (l.aggregated_loan_balance) * (-1) as debit_balance,
             
-            l.maturity_date,
+            case when msa.account_balance_derived < -1000 then msa.overdraft_closedon_date else l.maturity_date end as maturity_date
             
             msa.total_deposits_derived as total_credit_amount       
 
@@ -564,49 +564,12 @@ class DataExtraction:
 
             })
 
-        # print(return_data)
-        # print('just returned data')
+
         return True, return_data, len(final_corp), starting_point
 
 
 
 
-
-        # test_data = [ {
-        #                 'first_name': 'A and A LEGAL PRACTICE',
-        #                 'last_name': ' ',
-        #                 'mobile_number': '08028189805',
-        #                 'emails': 'mosespeter928@gmail.com', 
-        #                  'custom_field': {
-        #                     'cf_client_id': '5981', 
-        #                     'cf_customer_contact_address': 'None', 
-        #                     'cf_rc_number': '', 
-        #                     'cf_director_bvn': '22301540340', 
-        #                     'cf_director_name': 'ADEDOTUN PETER MOSES', 
-        #                     'cf_director_phone_no': '08028189805', 
-        #                     'cf_director_email': 'rockhead928@yahoo.com', 
-        #                     'cf_director_gender': 'Male', 
-        #                     'cf_director_DOB': '09/28/1983', 
-        #                     'cf_nature_of_business': 'N/a on Mifos', 
-        #                     'cf_industry/sector': 'N/a on Mifos', 
-        #                     'cf_date_of_incorporation': '01/01/2010', 
-        #                     'cf_account_officer': 'CHUKWURAH, PATRICK', 
-        #                     'cf_account_no': '1000068842', 
-        #                     'cf_account_type': 'Single entity account',
-        #                      'cf_product_name': 'Corporate Current Account', 
-        #                      'cf_account_balance': '127279',
-        #                       'cf_loan_value': 'nan', 
-        #                       'cf_outstanding_loan_amount': 'nan',
-        #                        'cf_last_repayment_date': '', 
-        #                        'cf_total_balance_all_accounts': '127279', 
-        #                        'cf_debit_balance': '0', 
-        #                        'cf_maturity_date': '', 
-        #                        'cf_total_credit_amount': '35276976.21'
-        #                        }
-        #                 }
-        #             ]
-
-        return test_data
 
 
 

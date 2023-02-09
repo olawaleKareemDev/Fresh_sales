@@ -35,8 +35,7 @@ class UpdateFreshSales:
 
 
         try:
-            print('i am here')
-            print(data)
+
             print(len(data), 'This is the number of data to processed')
             newly_created = 0
             count = starting_point
@@ -47,8 +46,6 @@ class UpdateFreshSales:
                 payload = {"contact":data[i]}
                 res = requests.post(url,headers=self.headers,json= payload)
 
-                # print(res.status_code)
-                # print(res.json())
                 if res.status_code==200:
                     newly_created += 1
                     print(f'Created {newly_created} records')
@@ -64,8 +61,6 @@ class UpdateFreshSales:
                     update_payload = {**update_payload, **payload }    
 
                     update_res = requests.post( url_upsert, headers=self.headers, json=update_payload)
-                    # print(update_res.content)
-                    # print(update_res.status_code)
        
 
             return True, {'status':'SUCCESS', 'Message':f'Successfully loaded {len(data)} contact data out of {total_data_size}'}
