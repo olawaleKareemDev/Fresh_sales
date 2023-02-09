@@ -72,7 +72,7 @@ class DataExtraction:
             
             (l.aggregated_loan_balance) * (-1) as debit_balance,
             
-            case when msa.account_balance_derived < -1000 then msa.overdraft_closedon_date else l.maturity_date end as maturity_date
+            l.maturity_date,
             
             msa.total_deposits_derived as total_credit_amount       
 
