@@ -41,3 +41,11 @@ def send_email_task():
         ['markkareem100@gmail.com']
     )
     return None
+
+
+from freshsales_automations.celery import app
+
+@app.task
+def task_one():
+    print(" task one called and worker is running good")
+    return "success"

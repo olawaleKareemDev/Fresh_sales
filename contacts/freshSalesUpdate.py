@@ -21,29 +21,44 @@ class UpdateFreshSales:
         pass
 
 
-    def create_contacts(self, size):
+    def create_contacts(self, data, size):
 
         url = f'{self.BASEURL}/contacts'
         url_upsert = f'{self.BASEURL}/contacts/upsert'
 
-        is_data, data, total_data_size, starting_point = DataExtraction().cleanData(size) 
+        # print(data, len(data))
 
-        if not is_data:
-            return False, {'status':'FAIL', 'Message':data}
+        if size == 500:
+            print('data within 500 df')
+            test_data = data[:500]
+            starting_point =1
+        else:
+            print('data beyond 500 df')
+            if  size <= len(data):
+                val, rem = divmod(size, 500)
+                if val == 1:
+                    test_data = data[500:size]
+                    starting_point = 500
+                if val > 1:
+                    starting_point =500 * (val-1)
+                    test_data = data[starting_point:size]
 
-            pass
+            else:
+                return False, f"data out of scope. This is the number of data currently available {len(data)}"
+
+
 
 
         try:
 
-            print(len(data), 'This is the number of data to processed')
+            print(len(test_data), 'This is the number of test_data to processed')
             newly_created = 0
             count = starting_point
 
 
-            for i in range(len(data)):
+            for i in range(len(test_data)):
 
-                payload = {"contact":data[i]}
+                payload = {"contact":test_data[i]}
                 res = requests.post(url,headers=self.headers,json= payload)
 
                 if res.status_code==200:
@@ -63,11 +78,11 @@ class UpdateFreshSales:
                     update_res = requests.post( url_upsert, headers=self.headers, json=update_payload)
        
 
-            return True, {'status':'SUCCESS', 'Message':f'Successfully loaded {len(data)} contact data out of {total_data_size}'}
+            return True, {'status':'SUCCESS', 'Message':f'Successfully loaded {len(test_data)} contact data out of {len(data)}', 'next_count': f'{size + 1}'}
 
         except Exception as e:
             print(e)
-            return False, {'status':'FAIL', 'Message':'Failed to load data'}
+            return False, {'status':'FAIL', 'Message':'Failed to load data', 'next_count': 'None'}
           
 
 if __name__ == "_main_":

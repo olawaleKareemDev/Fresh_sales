@@ -47,7 +47,8 @@ INSTALLED_APPS = [
 
     "contacts",
     "rest_framework",
-    "corsheaders"
+    "corsheaders",
+    # "celery",
 ]
 
 MIDDLEWARE = [
@@ -85,9 +86,20 @@ WSGI_APPLICATION = "freshsales_automations.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
+    # }
+
+    'default': {
+
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'admin',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'db',
+        'PORT': '3306',
     }
 }
 
@@ -129,22 +141,39 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # celery details
 
-CELERY_BROKER_URL = os.environ.get('CLOUD_AMPQ_BROKER')
+CELERY_BROKER_URL = "amqps://xokdteks:tBNvj3bfAqoa894onG2RwfW_xN2pCFXR@moose.rmq.cloudamqp.com/xokdteks"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
+from celery.schedules import crontab
+from datetime import datetime
 
-# Email
+CELERY_BEAT_SCHEDULE = { # scheduler configuration 
 
-# EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = False
-# EMAIL_HOST_USER = "olawalekareemdev@gmail.com"
-# EMAIL_HOST_PASSWORD = os.environ["EMAIL_PASSWORD"]
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# DEFAULT_FROM_EMAIL = "olawalekareemdev@gmail.com"
+    'Task_one_schedule' : {  
+        'task': 'contacts.tasks.task_one', 
+        'schedule': crontab(),
+    },
+
+    'Task_one_schedule' : {  
+        'task': 'contacts.tasks.task_one', 
+        'schedule': crontab(),
+    },
+
+    'Task_one_schedule' : {  
+        'task': 'contacts.tasks.task_one', 
+        'schedule': crontab(),
+    },
+
+    'Task_one_schedule' : {  
+        'task': 'contacts.tasks.task_one', 
+        'schedule': crontab(),
+    }
+
+}
+
+
+
 
 
 CORS_ALLOW_HEADERS = [
