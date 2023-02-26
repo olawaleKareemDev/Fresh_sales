@@ -129,7 +129,8 @@ class ContactViewSet(viewsets.ViewSet):
                     if cooperate_data.count() == 0 and check == False:
                         print('updating individual contact for the first time')
                         i_contacts = contact_models.ContactUpdateHolderClientIndividual.objects.create(contact_load_individual_client = data)
-                        i_contacts.save()
+                        print('done creating')
+                        # i_contacts.save()
                         check = True
 
                     if cooperate_data.count() > 0 and check == False:
@@ -137,6 +138,7 @@ class ContactViewSet(viewsets.ViewSet):
                         i_contacts = contact_models.ContactUpdateHolderClientIndividual.objects.all()[0]
                         i_contacts.contact_load_individual_client = data
                         i_contacts.save()
+                        print('done updating individual contacts')
 
                     data = {
                             'status': 'SUCCESS',
