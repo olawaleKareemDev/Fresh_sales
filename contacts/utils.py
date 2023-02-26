@@ -63,6 +63,21 @@ class PingChecker:
                     }
 
                 return False,  data
+            
+    def batcher(self, batch_no):
+
+        batch_DB = {
+            1:{'start': 0, 'end': 200000},
+            2:{'start': 200000, 'end': 400000},
+            3:{'start': 400000, 'end': 600000},
+            4:{'start': 600000, 'end': 800000},
+            5:{'start': 800000, 'end': 100000}
+        }
+
+
+        return batch_DB.get(batch_no, None)
+
+
 
 
 

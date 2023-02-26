@@ -37,7 +37,7 @@ class DummyData:
             
             
         # data = [d_data for i in range(462860)]
-        data = [d_data for i in range(500000)]
+        data = [d_data for i in range(200000)]
         # return_data = {'data':data}
         print('The dummy individual data size: ', sys.getsizeof(data))
 

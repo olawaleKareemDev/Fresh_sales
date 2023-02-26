@@ -15,6 +15,7 @@ class ContactUpdateHolderCooperate(models.Model):
     update_count = models.IntegerField(default=0)
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+    batch = models.IntegerField(default = 1, unique=True)
 
 
 class ContactUpdateHolderClientIndividual(models.Model):
@@ -28,6 +29,10 @@ class ContactUpdateHolderClientIndividual(models.Model):
     update_count = models.IntegerField(default=0)
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+    batch = models.IntegerField(default = 1, unique=True)
+
+
+
 
 
 
