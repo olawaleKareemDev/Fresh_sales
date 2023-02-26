@@ -106,12 +106,12 @@ class ContactViewSet(viewsets.ViewSet):
         if key == os.environ.get('API_KEY'):
 
             # check when last MIFOS was pinged
-            is_allow, msg = contact_utils.time_checker.check_last_update_individual_data()
+            # is_allow, msg = contact_utils.time_checker.check_last_update_individual_data()
 
-            print(is_allow, msg)
+            # print(is_allow, msg)
 
-            if not is_allow:
-                return Response(status=status.HTTP_400_BAD_REQUEST, data=data)
+            # if not is_allow:
+            #     return Response(status=status.HTTP_400_BAD_REQUEST, data=msg)
 
             print('begin data update')
           

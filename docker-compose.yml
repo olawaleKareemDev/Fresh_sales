@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # restart: always
+    restart: always
     # deploy:
     #   resources:
     #       limits:
@@ -14,9 +14,13 @@ services:
     #       reservations:
     #         cpus: 0.25
     #         memory: 2GB
+
     command: "python3 manage.py runserver 0.0.0.0:8080"
     ports:
       - 8081:8080
+    # command: gunicorn freshsales_automations.wsgi:application --bind 0.0.0.0:8000
+    # expose:
+    #   - 8000
     volumes:
       - .:/app
 
@@ -65,6 +69,13 @@ services:
       - .db2:/var/lib/postgresql/data
 
 
+
+  # nginx:
+  #   build: ./nginx
+  #   ports:
+  #     - 1337:80
+  #   depends_on:
+  #     - backend
 
 
 # volumes:
