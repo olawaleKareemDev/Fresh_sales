@@ -13,6 +13,7 @@ from contacts import models as contact_models
 from contacts import utils as contact_utils
 from datetime import date, timedelta, datetime
 
+from contacts import redshift_integration
 
 # # test celery
 def index(request):
@@ -81,6 +82,23 @@ class ContactViewSet(viewsets.ViewSet):
 
     def update_client_individual(self,request):
 
+        # import sys
+
+        # sample_data = [
+        #     {'name':'good'}, {'name 2':'good'}
+        # ]
+
+        # print(sys.getsizeof(sample_data))
+
+
+
+        # print('in individual')
+
+        # is_redshift, data = redshift_integration.redshift.setup_data_table()
+
+        # print( is_redshift, data)
+        # return Response(status=status.HTTP_200_OK, data=data)
+
         print('in individual')
 
         key = request.headers.get('key')
@@ -88,15 +106,18 @@ class ContactViewSet(viewsets.ViewSet):
         if key == os.environ.get('API_KEY'):
 
             # check when last MIFOS was pinged
-            is_allow, data = contact_utils.time_checker.check_last_update_individual_data()
+            is_allow, msg = contact_utils.time_checker.check_last_update_individual_data()
 
-            print(is_allow, data)
+            print(is_allow, msg)
 
             if not is_allow:
                 return Response(status=status.HTTP_400_BAD_REQUEST, data=data)
 
             print('begin data update')
+          
+
             is_data, data = DataExtraction().get_individual_data() 
+
 
             if is_data:
 
@@ -127,6 +148,7 @@ class ContactViewSet(viewsets.ViewSet):
                         
 
                 except Exception as e:
+                    print(e)
                     return Response(
                         status=status.HTTP_400_BAD_REQUEST, 
                         data={'status': 'Failed', 'messages': 'Error occured while creating data' }

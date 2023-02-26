@@ -11,7 +11,7 @@ class ContactUpdateHolderCooperate(models.Model):
         default=uuid.uuid4,
         editable=False,
     )
-    contact_load_cooperate_client = models.JSONField()
+    contact_load_cooperate_client = models.JSONField(default=dict)
     update_count = models.IntegerField(default=0)
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -24,7 +24,7 @@ class ContactUpdateHolderClientIndividual(models.Model):
         default=uuid.uuid4,
         editable=False,
     )
-    contact_load_individual_client = models.JSONField()
+    contact_load_individual_client = models.JSONField(default=dict)
     update_count = models.IntegerField(default=0)
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

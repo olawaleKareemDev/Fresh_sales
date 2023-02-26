@@ -92,15 +92,26 @@ DATABASES = {
     #     "NAME": BASE_DIR / "db.sqlite3",
     # }
 
-    'default': {
+    # 'default': {
 
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'admin',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'db',
-        'PORT': '3306',
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'admin',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': 'db',
+    #     'PORT': '3306',
+    # }
+
+
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres', 
+        'USER': 'postgres', 
+        'PASSWORD': 'postgres',
+        'HOST': 'db2', 
+        'PORT': '5432',
     }
+
 }
 
 
@@ -145,29 +156,30 @@ CELERY_BROKER_URL = "amqps://xokdteks:tBNvj3bfAqoa894onG2RwfW_xN2pCFXR@moose.rmq
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
+
 from celery.schedules import crontab
 from datetime import datetime
 
 CELERY_BEAT_SCHEDULE = { # scheduler configuration 
 
-    'Task_one_schedule' : {  
-        'task': 'contacts.tasks.task_one', 
-        'schedule': crontab(),
+    'Task_update_cooperate_data' : {  
+        'task': 'contacts.tasks.task_service_update_cooperate_data', 
+        'schedule': crontab(),  # happens every 9 am
     },
 
-    'Task_one_schedule' : {  
-        'task': 'contacts.tasks.task_one', 
-        'schedule': crontab(),
+    'Task_load_cooperate_data_freshsales' : {  
+        'task': 'contacts.tasks.task_freshsales_update_cooperate_data', 
+        'schedule': crontab(),  # happens 10 am
     },
 
-    'Task_one_schedule' : {  
-        'task': 'contacts.tasks.task_one', 
-        'schedule': crontab(),
+    'Task_update_individual_data' : {  
+        'task': 'contacts.tasks.task_service_update_individual_data', 
+        'schedule': crontab(),  # happens every midnight
     },
 
-    'Task_one_schedule' : {  
-        'task': 'contacts.tasks.task_one', 
-        'schedule': crontab(),
+    'Task_load_individual_data_freshsales' : {  
+        'task': 'contacts.tasks.task_freshsales_update_individual_data', 
+        'schedule': crontab(),  # happens every 4am
     }
 
 }

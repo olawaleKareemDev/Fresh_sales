@@ -5,6 +5,10 @@ import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
+from freshsales_automations.celery import app
+
+
+
 
 def send_email_task_now():
     message = Mail(
@@ -20,9 +24,6 @@ def send_email_task_now():
         print(response.headers)
     except Exception as e:
         print(e.message)
-
-
-
 
 
 
@@ -43,9 +44,30 @@ def send_email_task():
     return None
 
 
-from freshsales_automations.celery import app
+from django.urls import reverse
+
+
 
 @app.task
-def task_one():
+def task_service_update_cooperate_data():
+    print(" running task update cooperate data")
+    reverse('freshsales-load-contacts-cooperate')
+    # return "success"
+
+@app.task
+def task_freshsales_update_cooperate_data():
     print(" task one called and worker is running good")
     return "success"
+
+
+@app.task
+def task_service_update_individual_data():
+    print(" task one called and worker is running good")
+    return "success"
+
+@app.task
+def task_freshsales_update_individual_data():
+    print(" task one called and worker is running good")
+    return "success"
+
+

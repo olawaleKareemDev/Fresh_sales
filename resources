@@ -1,0 +1,6 @@
+https://episyche.com/blog/how-to-run-periodic-tasks-in-django-using-celery
+
+https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html
+
+celery -A freshsales_automations  beat -l info
+celery -A freshsales_automations  worker -l INFO

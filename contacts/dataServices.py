@@ -5,6 +5,10 @@ from datetime import datetime, timedelta
 import os
 from email_validator import validate_email, EmailNotValidError
 import re
+import sys
+
+
+from contacts import dummy_data
 
 
 class DataExtraction:
@@ -1122,18 +1126,14 @@ class DataExtraction:
     def get_individual_data(self):
 
 
-        Mifosdb = mysql.connector.connect(
-            host=os.environ.get("MIFOS_DB_HOST"),
-            user=os.environ.get("MIFOS_DB_USER"),
-            passwd=os.environ.get("MIFOS_DB_PASSWORD"),
-            database = os.environ.get("MIFOS_DB_NAME") 
-        )
+        # Mifosdb = mysql.connector.connect(
+        #     host=os.environ.get("MIFOS_DB_HOST"),
+        #     user=os.environ.get("MIFOS_DB_USER"),
+        #     passwd=os.environ.get("MIFOS_DB_PASSWORD"),
+        #     database = os.environ.get("MIFOS_DB_NAME") 
+        # )
 
 
-
-
-        #ndic monthly report for individual accounts
-        #   
         # ndic =  '''
         #         SELECT 
         #         ifnull(mc.id, mg.id) AS client_id,
@@ -1143,11 +1143,11 @@ class DataExtraction:
         #         ifnull(mc.display_name, mg.display_name) as client_name,
         #         ai.`Mobile Number` AS Phone_no,
         #         ai.`Email Address` as email,
-        #         ifnull(ai.`Mailing Address`, 'None') AS customer_contact_address,
+        #         ifnull(ai.`Mailing Address`, 'Not stated') AS customer_contact_address,
                 
         #         'N/a on Mifos' as 'occupation',
         #         mc.date_of_birth AS 'D.O.B',
-        #         ifnull(s.display_name, 'None') as 'account_officer',
+        #         ifnull(s.display_name, 'Not assigned') as 'account_officer',
         #         msa.account_no AS account_no,
         #         case  msa.account_type_enum 
         #             when '1' then 'Individual account'
@@ -1292,359 +1292,191 @@ class DataExtraction:
         #         and msa.account_type_enum in (1,2,3)
         #         and msa.status_enum = 300
         #         GROUP BY msa.account_no
-                
-        #         '''
+        # '''
 
-        ndic =  '''
-                SELECT 
-                ifnull(mc.id, mg.id) AS client_id,
-                -- ifnull(mc.lastname, mg.display_name) AS last_name,
-                -- ifnull(mc.middlename, mg.display_name) AS middle_name,
-                -- ifnull(mc.firstname, mg.display_name) AS first_name,
-                ifnull(mc.display_name, mg.display_name) as client_name,
-                ai.`Mobile Number` AS Phone_no,
-                ai.`Email Address` as email,
-                ifnull(ai.`Mailing Address`, 'Not stated') AS customer_contact_address,
-                
-                'N/a on Mifos' as 'occupation',
-                mc.date_of_birth AS 'D.O.B',
-                ifnull(s.display_name, 'Not assigned') as 'account_officer',
-                msa.account_no AS account_no,
-                case  msa.account_type_enum 
-                    when '1' then 'Individual account'
-                    when '2' then 'Group account'
-                    when '3' then 'JLG account' end AS account_type,
-                msp.name as 'product_name',
-                msa.account_balance_derived AS account_balance,
-                
-                ifnull(l.amount_disbursed, 0) as loan_value,
-                ifnull(l.loan_outstanding, 0) as outstanding_loan_amount,
-                l.last_repayment_date,
+        # df_ndic = pd.read_sql_query(ndic, Mifosdb)
+        # df_ndic['client_id'] = df_ndic['client_id'].astype(str)
 
-                d.aggregated_deposit as total_balance_all_accounts,
-                
-                ifnull((l.aggregated_loan_balance) * (-1), 0) as debit_balance,
-                
-                l.maturity_date,
-                
-                ifnull(msa.total_deposits_derived, 0) as total_credit_amount
-                
-            
-                -- left(odb.BVN, 11) AS client_bvn,
-                -- Null as account_category,
-                
-                -- case when isnull(msa.closedon_date) then 'Active' 
-                -- ELSE 'Dormant' END AS account_status,
-                -- NULL AS 'portion_of_deposit_as_collateral',
-                -- case when l.collateral_description like '%deposit%' or l.collateral_description like '%Deposit%' then l.collateral_value
-                -- else NULL end as portion_of_deposit_pledged_as_collateral,
+
+        # # cleaning date columns
+        # print('cleaning date columns')
+
+        # pattern = re.compile(r'^19\d\d')
+
+        # new_date = [] 
+        # for date in df_ndic['D.O.B']:    #runs 458k+ loop
+        #     if date == None:
+        #         date = '1900-01-01'
+        #         new_date.append(date)
+        #     else:
+        #         if not re.search(pattern, date.strftime('%Y-%m-%d')) and date != None:
+        #             date = '1900-01-01'
+        #             new_date.append(date)
+        #         else:
+        #             new_date.append(date.strftime('%Y-%m-%d'))
+
+        # clean_date = []
+        # for date in pd.to_datetime(new_date):    #runs 458k+ loop
+        #     if date.strftime('%Y-%m-%d') == '0080-11-26':
+        #         try:
+        #             clean_date.append(date.strftime('%m/%d/%Y'))
+        #         except ValueError:
+        #             clean_date.append('01/01/1900')
                     
+        #     else:
+        #         try:
+        #             clean_date.append(date.strftime('%m/%d/%Y'))
+        #         except ValueError:
+        #             clean_date.append('01/01/1900')
                 
+        # df_ndic['D.O.B'] = clean_date
 
-                -- l.loan_type,
-                -- l.date_granted,
-                -- l.loan_outstanding,
-                -- l.principal,
-                -- l.interest,
-                -- l.write_off_or_waiver,
-                -- l.cash_backed, 
-                -- l.cash_amount_if_yes,
-                -- l.secured,
-                -- l.collateral_type,
-                -- l.collateral_value,
-                -- l.collateral_description,
-                -- l.collateral_full_address,
-                -- l.collateral_status,
-                -- l.guarantor_name,
-                -- l.guarantor_BVN,
-                -- l.guarantor_ID,
-                -- l.guarantor_address,
-                -- l.guarantor_phone_no,
+
+        # new_date = [] 
+        # for date in pd.to_datetime(df_ndic['last_repayment_date']):  #runs 458k+ loop
+        #     try:
+        #         new_date.append(date.strftime('%m/%d/%Y'))
+        #     except ValueError:
+        #         new_date.append('01/01/1900')
                 
-                -- (d.aggregated_deposit) - (l.aggregated_loan_balance) as "Net_depositor's_balance"
+        # df_ndic['last_repayment_date'] = new_date
+
+
+        # new_date = [] 
+        # for date in pd.to_datetime(df_ndic['maturity_date']):  #runs 458k+ loop
+        #     try:
+        #         new_date.append(date.strftime('%m/%d/%Y'))
+        #     except ValueError:
+        #         new_date.append('01/01/1900')
                 
-                FROM m_client mc
-                left JOIN m_savings_account msa ON msa.client_id = mc.id
-                left JOIN m_savings_product msp ON msp.id = msa.product_id
-                left JOIN `Address Info` ai ON ai.client_id = mc.id
-                left JOIN m_group mg ON mg.id = msa.group_id
-                LEFT JOIN `Other Bank Details` odb ON odb.client_id = mc.id
-                left join 
-                        (select 
-                        ms.id,
-                        ms.display_name
-                        from m_staff ms
-                        where ms.is_active = 1) s on s.id = mc.staff_id
-
-                LEFT JOIN 
-
-                    (select
-                    msa.client_id,
-                    SUM(msa.account_balance_derived) AS aggregated_deposit
-                    FROM m_savings_account msa
-                    JOIN m_client c ON c.id = msa.client_id
-                    where !isnull(c.image_id)
-                    and msa.status_enum = 300
-                    GROUP BY msa.client_id) d ON d.client_id = mc.id
-
-                LEFT JOIN
-
-                    (select
-                    ml.id as loan_id,
-                    ml.client_id AS client_id,
-                    mpl.name AS loan_type,
-                    ml.disbursedon_date AS date_granted,
-                    ml.principal_disbursed_derived AS amount_disbursed,
-                    lt.last_repayment_date,
-                    lt.maturity_date,
-                    ml.total_outstanding_derived AS loan_outstanding,
-                    ml.principal_outstanding_derived AS principal,
-                    ml.interest_outstanding_derived AS interest,
-                    case when ml.total_waived_derived = 0 then ml.total_writtenoff_derived 
-                        ELSE ml.total_waived_derived END AS write_off_or_waiver,
-                    case when mpl.name like '%CASH-BACKED%' then 'YES'
-                        ELSE 'NO' end AS cash_backed,
-                    case when  mpl.name like '%CASH-BACKED%' then ml.principal_disbursed_derived 
-                        else NULL end AS cash_amount_if_yes,
-                    case when !isnull(mlc.type_cv_id) then 'YES'
-                        ELSE 'NO' END AS 'secured',
-                    mlc.description AS collateral_type,
-                    mlc.value AS collateral_value,
-                    mlc.description AS collateral_description,
-                    NULL AS collateral_full_address,
-                    'Perfected' AS collateral_status,
-                    NULL AS "guarantor_name",
-                    NULL AS "guarantor_BVN",
-                    NULL AS "guarantor_ID",
-                    NULL AS "guarantor_address",
-                    NULL AS "guarantor_phone_no",
-                    e.total_loan_balance as aggregated_loan_balance
-                    from m_loan ml
-                    left JOIN m_product_loan mpl ON mpl.id = ml.product_id
-                    LEFT JOIN m_loan_collateral mlc ON mlc.loan_id = ml.id
-                    left join 
-                        (SELECT
-                        ml.client_id,
-                        mlt.loan_id,
-                        mlt.amount,
-                        MAX(mlt.transaction_date) as last_repayment_date,
-                        ml.disbursedon_date AS disbursement_date,
-                        ml.expected_maturedon_date AS maturity_date,
-                        ml.loan_status_id AS loan_status
-                        FROM m_loan_transaction mlt
-                        JOIN m_loan ml ON ml.id = mlt.loan_id
-                        WHERE mlt.transaction_type_enum IN (2,5)
-                        AND mlt.is_reversed = 0
-                        AND ml.loan_status_id = 300
-                        GROUP BY mlt.loan_id) lt on lt.loan_id = ml.id
-                    left join
-                        (select
-                        lo.client_id,
-                        sum(lo.total_outstanding_derived) as 'total_loan_balance'
-                        FROM m_loan lo
-                        where lo.loan_status_id = 300
-                        GROUP BY lo.client_id) e ON e.client_id = ml.client_id
-                        
-                    where ml.loan_status_id = 300
-                    GROUP BY ml.account_no) l ON l.client_id = mc.id
-
-                WHERE !ISNULL(mc.image_id)
-                and msa.product_id != 26
-                and msa.account_type_enum in (1,2,3)
-                and msa.status_enum = 300
-                GROUP BY msa.account_no
-        '''
-
-        df_ndic = pd.read_sql_query(ndic, Mifosdb)
-        df_ndic['client_id'] = df_ndic['client_id'].astype(str)
-
-
-        # cleaning date columns
-        print('cleaning date columns')
-
-        pattern = re.compile(r'^19\d\d')
-
-        new_date = [] 
-        for date in df_ndic['D.O.B']:    #runs 458k+ loop
-            if date == None:
-                date = '1900-01-01'
-                new_date.append(date)
-            else:
-                if not re.search(pattern, date.strftime('%Y-%m-%d')) and date != None:
-                    date = '1900-01-01'
-                    new_date.append(date)
-                else:
-                    new_date.append(date.strftime('%Y-%m-%d'))
-
-        clean_date = []
-        for date in pd.to_datetime(new_date):    #runs 458k+ loop
-            if date.strftime('%Y-%m-%d') == '0080-11-26':
-                try:
-                    clean_date.append(date.strftime('%m/%d/%Y'))
-                except ValueError:
-                    clean_date.append('01/01/1900')
-                    
-            else:
-                try:
-                    clean_date.append(date.strftime('%m/%d/%Y'))
-                except ValueError:
-                    clean_date.append('01/01/1900')
-                
-        df_ndic['D.O.B'] = clean_date
-
-
-        new_date = [] 
-        for date in pd.to_datetime(df_ndic['last_repayment_date']):  #runs 458k+ loop
-            try:
-                new_date.append(date.strftime('%m/%d/%Y'))
-            except ValueError:
-                new_date.append('01/01/1900')
-                
-        df_ndic['last_repayment_date'] = new_date
-
-
-        new_date = [] 
-        for date in pd.to_datetime(df_ndic['maturity_date']):  #runs 458k+ loop
-            try:
-                new_date.append(date.strftime('%m/%d/%Y'))
-            except ValueError:
-                new_date.append('01/01/1900')
-                
-        df_ndic['maturity_date'] = new_date
+        # df_ndic['maturity_date'] = new_date
 
 
 
-        # cleaning phone columns
-        print('cleaning phone columns')
+        # # cleaning phone columns
+        # print('cleaning phone columns')
 
-        new_ph = []
-        for txt in df_ndic['Phone_no']:   #runs 458k+ loop
-            try:
-                x = re.findall("[0-9]", txt)
-                rc = ''.join([str(i) for i in x])
-                new_ph.append(rc)
-            except TypeError:
-                new_ph.append('0')
+        # new_ph = []
+        # for txt in df_ndic['Phone_no']:   #runs 458k+ loop
+        #     try:
+        #         x = re.findall("[0-9]", txt)
+        #         rc = ''.join([str(i) for i in x])
+        #         new_ph.append(rc)
+        #     except TypeError:
+        #         new_ph.append('0')
 
-        df_ndic['Phone_no'] = new_ph
+        # df_ndic['Phone_no'] = new_ph
 
-        new_ph = []
-        for no in df_ndic['Phone_no']:   #runs 458k+ loop
-            if len(str(no)) > 11:
-                no = float(str(no)[:11] + '.' + str(no)[11:])
-                new_ph.append(no)
-            else:
-                new_ph.append(no)
-        df_ndic['Phone_no'] = new_ph
+        # new_ph = []
+        # for no in df_ndic['Phone_no']:   #runs 458k+ loop
+        #     if len(str(no)) > 11:
+        #         no = float(str(no)[:11] + '.' + str(no)[11:])
+        #         new_ph.append(no)
+        #     else:
+        #         new_ph.append(no)
+        # df_ndic['Phone_no'] = new_ph
 
 
 
-        # cleaning email columns
-        print('cleaning email columns')
+        # # cleaning email columns
+        # print('cleaning email columns')
+
+
+        # email_regex = r'''(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])'''
+
+        # pattern = re.compile(email_regex)
+
 
         # val = []
         # counter = 1
-        # for email in df_ndic['email']:  #runs 458k+ loop
+        # for email in df_ndic['email'][:]:
         #     try:
-        #         validate_email(email)   # 2x 458k loop
-        #         val.append(email)
+        #         match = re.search(pattern, email)
+        #         if match:
+        #             val.append(email)
+        #         if not match:
+        #             val.append(f'iclienthasnoemail{counter}@gmail.com')
+        #             counter += 1
         #     except Exception as e:
+        #         # print(email, e)
         #         val.append(f'iclienthasnoemail{counter}@gmail.com')
         #         counter += 1
-        #     # except AttributeError:
-        #     #     val.append(dummy_email)   
+                
+                
         # df_ndic['email'] = val
 
-        email_regex = r'''(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])'''
 
-        pattern = re.compile(email_regex)
-
-
-        val = []
-        counter = 1
-        for email in df_ndic['email'][:]:
-            try:
-                match = re.search(pattern, email)
-                if match:
-                    val.append(email)
-                if not match:
-                    val.append(f'iclienthasnoemail{counter}@gmail.com')
-                    counter += 1
-            except Exception as e:
-                # print(email, e)
-                val.append(f'iclienthasnoemail{counter}@gmail.com')
-                counter += 1
-                
-                
-        df_ndic['email'] = val
-
-
-        #
-        print('This are the data headers')
-        print(df_ndic.columns)
+        # #
+        # print('This are the data headers')
+        # print(df_ndic.columns)
 
 
 
-        #
-        print('Begin data conversion for freshsales load up')
+        # #
+        # print('Begin data conversion for freshsales load up')
         try:
-            pass
-            test_data = df_ndic
-            # print(test_data, len(test_data))
+        #     pass
+        #     test_data = df_ndic
+        #     # print(test_data, len(test_data))
 
 
 
 
-            return_data = []
-            count = 0
-            for ind in test_data.index:
-                print('load data at', count)
-                return_data.append({
+        #     return_data = []
+        #     count = 0
+        #     for ind in test_data.index:
+        #         print('load data at', count)
+        #         return_data.append({
 
 
-                    #  ['client_id', 'client_name', 'Phone_no', 'email',
-                    # 'customer_contact_address', 'occupation', 'D.O.B', 'account_officer',
-                    # 'account_no', 'account_type', 'product_name', 'account_balance',
-                    # 'loan_value', 'outstanding_loan_amount', 'last_repayment_date',
-                    # 'total_balance_all_accounts', 'debit_balance', 'maturity_date',
-                    # 'total_credit_amount'],
+        #             #  ['client_id', 'client_name', 'Phone_no', 'email',
+        #             # 'customer_contact_address', 'occupation', 'D.O.B', 'account_officer',
+        #             # 'account_no', 'account_type', 'product_name', 'account_balance',
+        #             # 'loan_value', 'outstanding_loan_amount', 'last_repayment_date',
+        #             # 'total_balance_all_accounts', 'debit_balance', 'maturity_date',
+        #             # 'total_credit_amount'],
 
 
                     
-                    'first_name': str(test_data.get("client_name")[ind]),  # client_name is system first_name
-                    'last_name': ' ',
-                    'mobile_number':str(test_data.get("Phone_no")[ind]),
-                    'emails':str(test_data.get("email")[ind]),
+        #             'first_name': str(test_data.get("client_name")[ind]),  # client_name is system first_name
+        #             'last_name': ' ',
+        #             'mobile_number':str(test_data.get("Phone_no")[ind]),
+        #             'emails':str(test_data.get("email")[ind]),
 
-                    'custom_field':{
-                        'cf_client_id': str(test_data.get("client_id")[ind]), 
-                        'cf_loan_value':str(test_data.get("loan_value")[ind]),
-                        'cf_product_name':str(test_data.get("product_name")[ind]),  
-                        'cf_account_balance':str(test_data.get("account_balance")[ind]),
-                        # 'cf_customer_contact_address':str(test_data.get("customer_contact_address'")[ind]),
-                        'cf_account_officer':str(test_data.get("account_officer")[ind]), 
-                        'cf_account_type':str(test_data.get("account_type")[ind]),
-                        'cf_account_no':str(test_data.get("account_no")[ind]),
-                        'cf_maturity_date':str(test_data.get("maturity_date")[ind]),
-                        'cf_total_credit_amount':str(test_data.get("total_credit_amount")[ind]),
-                        'cf_total_balance_all_accounts':str(test_data.get("total_balance_all_accounts")[ind]),
-                        'cf_debit_balance':str(test_data.get("debit_balance")[ind]),
+        #             'custom_field':{
+        #                 'cf_client_id': str(test_data.get("client_id")[ind]), 
+        #                 'cf_loan_value':str(test_data.get("loan_value")[ind]),
+        #                 'cf_product_name':str(test_data.get("product_name")[ind]),  
+        #                 'cf_account_balance':str(test_data.get("account_balance")[ind]),
+        #                 # 'cf_customer_contact_address':str(test_data.get("customer_contact_address'")[ind]),
+        #                 'cf_account_officer':str(test_data.get("account_officer")[ind]), 
+        #                 'cf_account_type':str(test_data.get("account_type")[ind]),
+        #                 'cf_account_no':str(test_data.get("account_no")[ind]),
+        #                 'cf_maturity_date':str(test_data.get("maturity_date")[ind]),
+        #                 'cf_total_credit_amount':str(test_data.get("total_credit_amount")[ind]),
+        #                 'cf_total_balance_all_accounts':str(test_data.get("total_balance_all_accounts")[ind]),
+        #                 'cf_debit_balance':str(test_data.get("debit_balance")[ind]),
 
-                        ## newly
-                        'cf_last_repayment_date':str(test_data.get("last_repayment_date")[ind]),
-                        # 'cf_gender':str(test_data.get("gender")[ind]),
-                        'cf_occupation':str(test_data.get("occupation")[ind]),
-                        'cf_date_of_birth':str(test_data.get("D.O.B")[ind]),
-                        'outstanding_loan_amount':str(test_data.get("outstanding_loan_amount")[ind]),
+        #                 ## newly
+        #                 'cf_last_repayment_date':str(test_data.get("last_repayment_date")[ind]),
+        #                 # 'cf_gender':str(test_data.get("gender")[ind]),
+        #                 'cf_occupation':str(test_data.get("occupation")[ind]),
+        #                 'cf_date_of_birth':str(test_data.get("D.O.B")[ind]),
+        #                 'outstanding_loan_amount':str(test_data.get("outstanding_loan_amount")[ind]),
 
-                    }
+        #             }
 
-                })
+        #         })
 
-                count += 1
+        #         count += 1
 
 
+    
             print('done prepping data')
+
+            return_data = dummy_data.dummydata.generate_individual_client_data()
+
+            print(sys.getsizeof(return_data))
 
             return True, return_data
         except Exception as e:
