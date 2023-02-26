@@ -67,11 +67,11 @@ class PingChecker:
     def batcher(self, batch_no):
 
         batch_DB = {
-            1:{'start': 0, 'end': 200000},
-            2:{'start': 200000, 'end': 400000},
-            3:{'start': 400000, 'end': 600000},
-            4:{'start': 600000, 'end': 800000},
-            5:{'start': 800000, 'end': 100000}
+            1:{'start': 0, 'end': 100000},
+            2:{'start': 100000, 'end': 200000},
+            3:{'start': 200000, 'end': 300000},
+            4:{'start': 400000, 'end': 500000},
+            5:{'start': 600000, 'end': 700000}
         }
 
 
