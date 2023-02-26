@@ -128,9 +128,19 @@ class ContactViewSet(viewsets.ViewSet):
 
                     if cooperate_data.count() == 0 and check == False:
                         print('updating individual contact for the first time')
-                        i_contacts = contact_models.ContactUpdateHolderClientIndividual.objects.create(contact_load_individual_client = data)
-                        print('done creating')
-                        # i_contacts.save()
+                        try:
+                            i_contacts = contact_models.ContactUpdateHolderClientIndividual.objects.create(contact_load_individual_client = data)
+                            print('done creating')
+                            # i_contacts.save()
+                        except Exception as e:
+                            print(e)
+                            return Response(
+                                    status=status.HTTP_400_BAD_REQUEST, 
+                                    data={'status': 'Failed', 'messages': 'Error occured while creating data' }
+                                )
+                            
+                            pass
+
                         check = True
 
                     if cooperate_data.count() > 0 and check == False:
