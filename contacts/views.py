@@ -118,7 +118,7 @@ class ContactViewSet(viewsets.ViewSet):
                 data={'status': 'FAIL', 'messages': 'Specify data upload batch' }
             )
         
-        if  batch not in [i for i in range(5)]:
+        if  batch not in [i for i in range(6)]:
             return Response(
                 status=status.HTTP_400_BAD_REQUEST, 
                 data={'status': 'FAIL', 'messages': 'Specify correct batch type from 1-5' }
@@ -211,6 +211,19 @@ class ContactViewSet(viewsets.ViewSet):
 
         key = request.headers.get('key')
         size = int(request.headers.get('size'))
+        batch = int(request.headers.get('batch'))
+
+        if not batch:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST, 
+                data={'status': 'FAIL', 'messages': 'Specify data upload batch' }
+            )
+        
+        if  batch not in [i for i in range(5)]:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST, 
+                data={'status': 'FAIL', 'messages': 'Specify correct batch type from 1-5' }
+            )
 
         if not size >= 500 :
             size_error_data= {
@@ -230,7 +243,8 @@ class ContactViewSet(viewsets.ViewSet):
    
         print('begin data loading')
     
-        cooperate_data = contact_models.ContactUpdateHolderCooperate.objects.all()[0]
+        # cooperate_data = contact_models.ContactUpdateHolderCooperate.objects.all()[0]
+        cooperate_data = contact_models.ContactUpdateHolderCooperate.objects.get(batch=batch)
         is_data, data = UpdateFreshSales().create_contacts(
             data=cooperate_data.contact_load_cooperate_client,
             size=size
@@ -247,6 +261,19 @@ class ContactViewSet(viewsets.ViewSet):
 
         key = request.headers.get('key')
         size = int(request.headers.get('size'))
+        batch = int(request.headers.get('batch'))
+
+        if not batch:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST, 
+                data={'status': 'FAIL', 'messages': 'Specify data upload batch' }
+            )
+        
+        if  batch not in [i for i in range(5)]:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST, 
+                data={'status': 'FAIL', 'messages': 'Specify correct batch type from 1-5' }
+            )
 
         if not size >= 500 :
             size_error_data= {
@@ -266,7 +293,8 @@ class ContactViewSet(viewsets.ViewSet):
    
         print('begin data loading')
     
-        cooperate_data = contact_models.ContactUpdateHolderClientIndividual.objects.all()[0]
+        # cooperate_data = contact_models.ContactUpdateHolderClientIndividual.objects.all()[0]
+        cooperate_data = contact_models.ContactUpdateHolderClientIndividual.objects.get(batch=batch)
         is_data, data = UpdateFreshSales().create_contacts(
             data=cooperate_data.contact_load_individual_client,
             size=size
