@@ -118,7 +118,7 @@ class ContactViewSet(viewsets.ViewSet):
                 data={'status': 'FAIL', 'messages': 'Specify data upload batch' }
             )
         
-        if  batch not in [1,2,3,4,5]:
+        if  batch not in [i for i in range(5)]:
             return Response(
                 status=status.HTTP_400_BAD_REQUEST, 
                 data={'status': 'FAIL', 'messages': 'Specify correct batch type from 1-5' }

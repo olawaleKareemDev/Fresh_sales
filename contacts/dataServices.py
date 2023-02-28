@@ -1077,8 +1077,11 @@ class DataExtraction:
             # test_data = final_corp
             # print(test_data, len(test_data))
 
+            count = batch_data.get('start')
+
             return_data = []
             for ind in test_data.index:
+                print(count)
                 return_data.append({
                     
                     'first_name': str(test_data.get("client_name")[ind]),  # client_name is system first_name
@@ -1114,6 +1117,8 @@ class DataExtraction:
                     }
 
                 })
+
+                count +=1 
 
 
 
@@ -1412,10 +1417,12 @@ class DataExtraction:
             
             # call batch utils to figure things out.
             batch_data = contacts_utils.time_checker.batcher(batch_no=batch)
+
+            print(f"loading data starting from {batch_data.get('start')} to {batch_data.get('end')}")
             test_data = df_ndic[batch_data.get('start'): batch_data.get('end')]
            
             return_data = []
-            count = 0
+            count = batch_data.get('start')
             for ind in test_data.index:
                 print('load data at', count)
                 return_data.append({
