@@ -78,14 +78,14 @@ class UpdateFreshSales:
                     update_res = requests.post( url_upsert, headers=self.headers, json=update_payload)
         
 
-                return True, {'status':'SUCCESS', 'Message':f'Successfully loaded {len(test_data)} contact data out of {len(data)}', 'next_count': f'{size + 1}'}
 
             except Exception as e:
                 print(e)
-                return False, {'status':'FAIL', 'Message':'Failed to load data', 'next_count': 'None'}
+                # return False, {'status':'FAIL', 'Message':'Failed to load data', 'next_count': 'None'}
                 pass
 
 
+        return True, {'status':'SUCCESS', 'Message':f'Successfully loaded {len(test_data)} contact data out of {len(data)}', 'next_count': f'{size + 1}'}
 
           
 
