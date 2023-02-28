@@ -48,15 +48,15 @@ class UpdateFreshSales:
 
 
 
-
-        try:
-
             print(len(test_data), 'This is the number of test_data to processed')
             newly_created = 0
             count = starting_point
 
 
-            for i in range(len(test_data)):
+        
+        for i in range(len(test_data)):
+
+            try:
 
                 payload = {"contact":test_data[i]}
                 res = requests.post(url,headers=self.headers,json= payload)
@@ -66,7 +66,7 @@ class UpdateFreshSales:
                     print(f'Created {newly_created} records')
 
                 if res.status_code==400 and 'already exists' in res.json()['errors']['message'][0]:
-               
+                
                     print(f'updating existing records {count}')
                     count += 1
 
@@ -76,13 +76,17 @@ class UpdateFreshSales:
                     update_payload = {**update_payload, **payload }    
 
                     update_res = requests.post( url_upsert, headers=self.headers, json=update_payload)
-       
+        
 
-            return True, {'status':'SUCCESS', 'Message':f'Successfully loaded {len(test_data)} contact data out of {len(data)}', 'next_count': f'{size + 1}'}
+                return True, {'status':'SUCCESS', 'Message':f'Successfully loaded {len(test_data)} contact data out of {len(data)}', 'next_count': f'{size + 1}'}
 
-        except Exception as e:
-            print(e)
-            return False, {'status':'FAIL', 'Message':'Failed to load data', 'next_count': 'None'}
+            except Exception as e:
+                print(e)
+                return False, {'status':'FAIL', 'Message':'Failed to load data', 'next_count': 'None'}
+                pass
+
+
+
           
 
 if __name__ == "_main_":
