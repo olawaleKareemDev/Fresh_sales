@@ -48,9 +48,9 @@ class UpdateFreshSales:
 
 
 
-            print(len(test_data), 'This is the number of test_data to processed')
-            newly_created = 0
-            count = starting_point
+        print(len(test_data), 'This is the number of test_data to processed')
+        newly_created = 0
+        count = starting_point
 
 
         
